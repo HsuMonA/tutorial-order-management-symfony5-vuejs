@@ -1,0 +1,21 @@
+version: "3.1"
+
+services:
+  db:
+    image: mariadb:10.3
+    restart: always
+    environment:
+      - MARIADB_ROOT_USER=root
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_USER=bestell_user
+      - MARIADB_PASSWORD=123456
+      - MARIADB_DATABASE=bestell_db
+    volumes:
+      - ./var/db-data:/var/lib/mysql:rw
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
