@@ -26,12 +26,20 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sendImage = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class)]
-    private Collection $product;
+    #[ORM\OneToMany(mappedBy: 'orderEntity', targetEntity: OrderLineItem::class, orphanRemoval: true)]
+    private Collection $orderLineItems;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Recipient $recipient = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $company = null;
 
     public function __construct()
     {
-        $this->product = new ArrayCollection();
+        $this->orderLineItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,25 +84,55 @@ class Order
     }
 
     /**
-     * @return Collection<int, Product>
+     * @return Collection<int, OrderLineItem>
      */
-    public function getProduct(): Collection
+    public function getOrderLineItems(): Collection
     {
-        return $this->product;
+        return $this->orderLineItems;
     }
 
-    public function addProduct(Product $product): self
+    public function addOrderLineItem(OrderLineItem $orderLineItem): self
     {
-        if (!$this->product->contains($product)) {
-            $this->product->add($product);
+        if (!$this->orderLineItems->contains($orderLineItem)) {
+            $this->orderLineItems->add($orderLineItem);
+            $orderLineItem->setOrderEntity($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function removeOrderLineItem(OrderLineItem $orderLineItem): self
     {
-        $this->product->removeElement($product);
+        if ($this->orderLineItems->removeElement($orderLineItem)) {
+            // set the owning side to null (unless already changed)
+            if ($orderLineItem->getOrderEntity() === $this) {
+                $orderLineItem->setOrderEntity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRecipient(): ?Recipient
+    {
+        return $this->recipient;
+    }
+
+    public function setRecipient(Recipient $recipient): self
+    {
+        $this->recipient = $recipient;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }
