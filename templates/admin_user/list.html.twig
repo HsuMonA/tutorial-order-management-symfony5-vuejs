@@ -12,6 +12,8 @@
 						<th>#</th>
 						<th>Email</th>
 						<th>Firma</th>
+						<th>Aktionen</th>
+
 					</tr>
 				</thead>
 
@@ -20,6 +22,8 @@
 						<td>{{ user.id }}</td>
 						<td>{{ user.email }}</td>
 						<td>{{ user.company.name }}</td>
+						<td><a href="{{ path('product_add', {'companyId': user.company.id}) }}"</a>Produkt anlegen</td>
+
 					</tr>
 				{% endfor %}
 			</table>
