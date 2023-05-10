@@ -30,6 +30,8 @@ class ProductController extends AbstractController
             $product->setCompany($company);
             $entityManager->persist($product);
             $entityManager->flush();
+            $this->addFlash('success', 'Das Produkt wurde erfolgreich angelegt.');
+            return $this->redirectToRoute('admin_user_list');
         }
 
         return $this->render('product/add.html.twig', [

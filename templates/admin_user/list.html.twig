@@ -12,8 +12,8 @@
 						<th>#</th>
 						<th>Email</th>
 						<th>Firma</th>
+						<th>Produkte</th>
 						<th>Aktionen</th>
-
 					</tr>
 				</thead>
 
@@ -22,8 +22,18 @@
 						<td>{{ user.id }}</td>
 						<td>{{ user.email }}</td>
 						<td>{{ user.company.name }}</td>
-						<td><a href="{{ path('product_add', {'companyId': user.company.id}) }}"</a>Produkt anlegen</td>
+						<td>
+							<ul class="list-group list-group-flush">
+								{% for product in user.company.products %}
+									<li class="list-group-item">{{ product.name }}</li>
+								{% endfor %}
 
+							</ul>
+						</td>
+						<td>
+							<a href="{{ path('product_add', {'companyId': user.company.id}) }}">
+								Produkt anlegen</a>
+						</td>
 					</tr>
 				{% endfor %}
 			</table>
