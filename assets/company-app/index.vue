@@ -1,11 +1,18 @@
 <template>
     <div>
-        <h1>Hello Company!</h1>
+        <h1>FirmenÜbersicht</h1>
+        <company-table-view :companies="companies"></company-table-view>
     </div>
 </template>
 <script>
+
+import CompanyTableView from './components/CompanyTableView';
+
 export default {
     name: 'Company-App-Index',
+    components: {
+       CompanyTableView,
+    },
     data: function () {
         return {
             companies: [],
@@ -13,7 +20,6 @@ export default {
     },
     mounted() {
         this.$store.dispatch('loadCompanies').then(companies => {
-            console.log(companies);
             this.companies = companies;
         })
     }
