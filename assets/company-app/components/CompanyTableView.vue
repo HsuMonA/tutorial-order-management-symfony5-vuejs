@@ -12,7 +12,7 @@
 
       <tbody>
         <template v-for="company in companies" :key="company.id">
-            <company-table-row :company="company"></company-table-row>
+          <company-table-row :company="company"></company-table-row>
         </template>
       </tbody>
     </table>
